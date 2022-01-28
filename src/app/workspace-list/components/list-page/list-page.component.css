@@ -1,0 +1,13 @@
+.item {
+  margin: 1rem;
+}
+
+.container {
+  height: 100%;
+}
+
+mat-nav-list {
+  overflow: auto;
+  height: 90%;
+  max-height: 90%;
+}

@@ -1,0 +1,4 @@
+<app-error *ngIf="errorCode == 400 || errorCode == 500"></app-error>
+<app-unauthorized *ngIf="errorCode == 401"></app-unauthorized>
+<app-forbidden *ngIf="errorCode == 403"></app-forbidden>
+<app-not-found *ngIf="errorCode == 404"></app-not-found>

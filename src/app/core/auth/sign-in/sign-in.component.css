@@ -1,0 +1,19 @@
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 0.8rem;
+}
+
+.form-submit {
+  margin: 0 auto;
+  margin-top: 0.8rem;
+  width: 100%;
+}
+
+.form-container {
+  border-radius: 5px;
+  padding: 1rem;
+  width: 20rem;
+  margin: 0 auto;
+}

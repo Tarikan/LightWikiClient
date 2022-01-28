@@ -1,0 +1,23 @@
+<div class="form-container mat-app-background">
+  <h2 class="form-row">Sign Up Here</h2>
+  <form (submit)="onSignup(signupForm)" #signupForm="ngForm">
+    <mat-form-field appearance="fill" [hideRequiredMarker]=true class="form-row">
+      <mat-label for="email"><b>Email address</b></mat-label>
+      <input matInput type="text" ngModel #emailInput="ngModel" [(ngModel)]="email" placeholder="Enter Email" name="email"
+             id="email" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" [hideRequiredMarker]=true class="form-row">
+      <mat-label for="psw"><b>Password</b></mat-label>
+      <input matInput type="password" name="password" ngModel minlength="6" #passwordInput="ngModel" [(ngModel)]="password"
+             placeholder="Enter Password" id="psw" required>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="form-submit">Register</button>
+  </form>
+  <button mat-button class="form-row" (click)="onHaveAccount()">Already have an account?</button>
+</div>
+
+<div class="full-screen-spinner-container" *ngIf="isLoading">
+  <mat-spinner class="full-screen-spinner"></mat-spinner>
+</div>

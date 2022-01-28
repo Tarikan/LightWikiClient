@@ -1,0 +1,21 @@
+<div class="container mat-background-accent">
+  <mat-nav-list>
+    <mat-list-item class="list-item" *ngFor="let w of Workspaces" (click)="onWorkspaceClick(w.slug)">
+      <h3 class="item">{{w.id}}</h3>
+      <h3 class="item">{{w.name}}</h3>
+      <h3 class="item">{{w.slug}}</h3>
+    </mat-list-item>
+  </mat-nav-list>
+
+  <mat-paginator [length]=Length
+                 [pageSize]=PageSize
+                 [pageIndex]="0"
+                 [pageSizeOptions]="[5, 10, 25]"
+                 (page)="onPaginatorUpdate($event)"
+                 aria-label="Select page" style="vertical-align: bottom">
+  </mat-paginator>
+</div>
+
+<div class="full-screen-spinner-container-without-background" *ngIf="IsLoading">
+  <mat-spinner class="full-screen-spinner"></mat-spinner>
+</div>

@@ -1,0 +1,40 @@
+<div *ngIf="workspace != undefined">
+  <div appMaterialElevation class="article-card">
+    <span class="md-body-2" (click)="onRootNodeClick()">{{workspace!.name}}</span>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-tree *ngIf="workspace != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
+    <cdk-nested-tree-node
+      (click)="onNodeClick(node)"
+      *cdkTreeNodeDef="let node"
+      class="tree-node">
+      <div appMaterialElevation class="article-card" [class.mat-background-primary]="node == selectedHeader">
+        <button disabled mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <span class="md-body-2" (click)="onNodeClick(node)">{{node.name}}</span>
+      </div>
+    </cdk-nested-tree-node>
+
+    <cdk-nested-tree-node
+      *cdkTreeNodeDef="let node; when: hasChild"
+      class="tree-node">
+      <div appMaterialElevation class="article-card" [class.mat-background-warn]="node == selectedHeader">
+        <button mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <span class="md-body-2" (click)="onNodeClick(node)">{{node.name}}</span>
+      </div>
+      <div *ngIf="treeControl.isExpanded(node)">
+        <ng-container cdkTreeNodeOutlet></ng-container>
+      </div>
+    </cdk-nested-tree-node>
+  </mat-tree>
+</div>
+
