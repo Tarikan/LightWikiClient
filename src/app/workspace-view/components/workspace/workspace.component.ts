@@ -15,13 +15,14 @@ import {BehaviorSubject, catchError, EMPTY, map, Observable, Subject, tap} from 
 })
 export class WorkspaceComponent implements OnInit {
   public isInitialized = false;
+  public error: Subject<Errors> = new Subject<Errors>();
   public hasError: Errors | undefined;
   public workspaceSlug: string = '';
   public articleSlug: string = '';
   public workspace: Workspace | undefined;
   public article: Article | undefined;
   public workspaceObservable: BehaviorSubject<Workspace | undefined>;
-  public slugsObservable: BehaviorSubject<[string, string]> = new BehaviorSubject<[string, string]>(
+  public slugsObservable: BehaviorSubject<[workspaceSlug: string, articleSlug: string]> = new BehaviorSubject<[string, string]>(
     [this.workspaceSlug, this.articleSlug]
   );
 
@@ -34,6 +35,10 @@ export class WorkspaceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.error.subscribe(err => {
+      this.hasError = err!;
+    });
+
     this.route.params.subscribe(result => {
       let oldWorkspaceSlug = this.workspaceSlug;
       this.workspaceSlug = result['workspace_slug'];

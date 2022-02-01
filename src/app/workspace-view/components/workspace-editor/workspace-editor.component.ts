@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Route, Router} from "@angular/router";
 import {ArticleService} from "../../../api/article.service";
-import {catchError, EMPTY, tap} from "rxjs";
+import {catchError, EMPTY, Subject, tap} from "rxjs";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Workspace} from "../../../shared/models/workspaces/workspace";
 import {WorkspaceService} from "../../../api/workspace.service";

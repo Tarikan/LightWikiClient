@@ -3,6 +3,6 @@ export interface ArticleHeader {
   name : string;
   hasChildren : boolean;
   // children: Array<ArticleHeader>;
-  parentId: number;
+  parentArticleId: number;
   slug : string;
 }

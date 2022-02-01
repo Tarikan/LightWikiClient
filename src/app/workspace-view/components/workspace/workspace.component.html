@@ -1,10 +1,10 @@
 <div *ngIf="hasError == undefined" class="container">
   <mat-sidenav-container class="mat-sidenav-container">
     <mat-sidenav opened mode="side">
-      <app-workspace-tree *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
+      <app-workspace-tree [errorSubject]="error" *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
     </mat-sidenav>
     <mat-sidenav-content>
-      <app-workspace-viewer [workspaceArticleSlugs]="slugsObservable" [workspaceSlug]="workspaceSlug" [articleSlug]="articleSlug"></app-workspace-viewer>
+      <app-workspace-viewer [errorSubject]="error" [workspaceArticleSlugs]="slugsObservable" [workspaceSlug]="workspaceSlug" [articleSlug]="articleSlug"></app-workspace-viewer>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

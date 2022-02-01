@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Workspace} from "../../../shared/models/workspaces/workspace";
 import {ArticleHeader} from "../../../shared/models/articles/article-header";
-import {map, Observable, tap} from "rxjs";
+import {catchError, EMPTY, map, Observable, Subject, tap} from "rxjs";
 import {WorkspaceService} from "../../../api/workspace.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatTreeNestedDataSource} from "@angular/material/tree";
@@ -13,6 +13,8 @@ import {
   CreateArticleDialogData
 } from "../create-article-dialog/create-article-dialog.component";
 import {ArticleService} from "../../../api/article.service";
+import {Errors, ErrorToEnum} from "../../../core/enums/errors";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-workspace-tree',
@@ -38,6 +40,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
   @Input('selectedComponentId') selectedComponentId: number | undefined;
   @Input('workspaceObservable') workspaceObservable!: Observable<Workspace | undefined>;
+  @Input('errorSubject') errorSubject: Subject<Errors> | undefined;
 
   ngOnInit(): void {
     this.route.params.subscribe(next => {
@@ -57,17 +60,28 @@ export class WorkspaceTreeComponent implements OnInit {
       return [];
     }
 
-    var children = this.dataSource.data.filter(n => n.parentId == node.id);
+    let children = this.dataSource.data.filter(n => n.parentArticleId == node.id);
+    //console.log(node, children.length)
     if (node.hasChildren && children.length > 0) {
       return children;
     }
 
-    return this.workspaceService.workspacesTreeGet(this.workspace!.id, node.id, 'body')
+    return this.workspaceService.workspacesTreeGet(this.workspace!.id, node.id, 'response')
       .pipe(
-        map(x => x.collection),
+        catchError((error: HttpErrorResponse) => {
+          this.errorSubject?.next(ErrorToEnum(error.status))
+          return EMPTY;
+        }),
+        map(res => res.body!.collection),
         tap(res => {
-          res.forEach(e => e.parentId == node.parentId);
-          this.dataSource.data.push(...res);
+          //this.dataSource.data.push(...res.filter(r => !this.dataSource.data.find(a => a.id == r.id)));
+          //console.log(this.dataSource.data.filter(a => a.parentArticleId == node.id))
+          this.dataSource.data.push(...res)
+          //console.log(res, node, this.dataSource.data)
+        }),
+        map(res => {
+          let ret = res.filter(a => a.parentArticleId == node.id);
+          return ret;
         }));
   }
 
@@ -89,12 +103,22 @@ export class WorkspaceTreeComponent implements OnInit {
     this.canCreateArticle =
       workspace.workspaceAccessRuleForCaller && WorkspaceAccessRule.createArticle == WorkspaceAccessRule.createArticle;
 
-    this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'body')
+    this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'response')
+      .pipe(catchError((error: HttpErrorResponse) => {
+          this.errorSubject?.next(ErrorToEnum(error.status))
+          return EMPTY;
+        }),
+        map(res => res.body!),)
       .subscribe(result => {
-        this.dataSource.data = result.collection;
+        this.dataSource.data = result.collection.filter(a => a.parentArticleId == null);
         let selected = this.dataSource.data.find(h => h.slug == this.articleSlug);
-        if (selected == null && !this.isInitialized) {
-          this.articleService.getArticleBySlugs(this.workspace!.slug, this.articleSlug, 'body')
+        if (selected == null && !this.isInitialized && this.workspace!.workspaceRootArticleSlug != this.articleSlug) {
+          this.articleService.getArticleBySlugs(this.workspace!.slug, this.articleSlug, 'response')
+            .pipe(catchError((error: HttpErrorResponse) => {
+                this.errorSubject?.next(ErrorToEnum(error.status))
+                return EMPTY;
+              }),
+              map(res => res.body!),)
             .subscribe(article => {
               this.selectedComponentId = article.id;
               this.articleService.getArticleAncestors(article.id, 'body')
@@ -112,12 +136,18 @@ export class WorkspaceTreeComponent implements OnInit {
   }
 
   recursiveExpandTree(root: ArticleHeader, nodes: number[], pos: number) {
-    if (pos > nodes.length) {
+    if (root.id == nodes.slice(-1)[0]) {
+      for (let i = 0; i < nodes.length; i++)
+      {
+        this.treeControl.expand(this.dataSource.data.find(n => n.id == nodes[i])!)
+      }
+    }
+
+    if (pos >= nodes.length) {
       return;
     }
 
     let col = this.getChildren(root);
-    this.treeControl.expand(this.dataSource.data.find(e => e.id == root.id)!);
 
     if ('subscribe' in col) {
       col.subscribe(
@@ -146,6 +176,11 @@ export class WorkspaceTreeComponent implements OnInit {
           workspaceId: this.workspace!.id
         },
         'response')
+        .pipe(catchError((error: HttpErrorResponse) => {
+            this.errorSubject?.next(ErrorToEnum(error.status))
+            return EMPTY;
+          }),
+          map(res => res.body!),)
         .subscribe(res => {
           this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'body')
             .subscribe(result => {
