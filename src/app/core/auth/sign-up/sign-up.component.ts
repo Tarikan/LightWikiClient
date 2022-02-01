@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {environment} from "../../../../environments/environment";
 import {NgForm} from "@angular/forms";
-import { CognitoUserPool,CognitoUserAttribute } from 'amazon-cognito-identity-js';
+import {CognitoUserPool} from 'amazon-cognito-identity-js';
 import {Router} from "@angular/router";
-
-interface formDataInterface {
-  "email": string,
-  "password": string
-};
+import {errorToRoute} from "../../../app-routing.module";
+import {Errors} from "../../enums/errors";
 
 @Component({
   selector: 'app-sign-up',
@@ -37,18 +34,15 @@ export class SignUpComponent implements OnInit {
       };
       var userPool = new CognitoUserPool(poolData);
       var attributeList: any[] = [];
-      let formData: formDataInterface = {
-        "email": this.email,
-        "password": this.password,
-      }
 
       userPool.signUp(this.email, this.password, attributeList, [], (
         err,
-        result
+        _
       ) => {
         this.isLoading = false;
         if (err) {
           alert(err.message || JSON.stringify(err));
+          this.router.navigate([errorToRoute(Errors.ServerError)])
           return;
         }
         // this.router.navigate(['/signin']);

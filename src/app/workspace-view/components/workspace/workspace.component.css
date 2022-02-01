@@ -1,18 +1,6 @@
-.mat-sidenav-container {
-  height: 100%;
-}
-
-.mat-sidenav .mat-sidenav-content {
-  padding: 0.4rem;
-}
-
-.mat-sidenav {
-  overflow: auto;
-  width: 15%;
-}
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+

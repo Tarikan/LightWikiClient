@@ -1,12 +1,12 @@
 <div *ngIf="hasError == undefined" class="container">
-  <mat-sidenav-container class="mat-sidenav-container">
-    <mat-sidenav opened mode="side">
+  <as-split direction="horizontal">
+    <as-split-area [size]="20">
       <app-workspace-tree [errorSubject]="error" *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
-    </mat-sidenav>
-    <mat-sidenav-content>
+    </as-split-area>
+    <as-split-area [size]="80">
       <app-workspace-viewer [errorSubject]="error" [workspaceArticleSlugs]="slugsObservable" [workspaceSlug]="workspaceSlug" [articleSlug]="articleSlug"></app-workspace-viewer>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    </as-split-area>
+  </as-split>
 </div>
 
 <app-error-switcher *ngIf="hasError != undefined" [error]="hasError"></app-error-switcher>
