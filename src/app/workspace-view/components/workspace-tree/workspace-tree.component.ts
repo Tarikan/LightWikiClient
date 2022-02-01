@@ -13,7 +13,7 @@ import {
   CreateArticleDialogData
 } from "../create-article-dialog/create-article-dialog.component";
 import {ArticleService} from "../../../api/article.service";
-import {Errors, ErrorToEnum} from "../../../core/enums/errors";
+import {Errors, errorToEnum} from "../../../core/enums/errors";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
@@ -69,7 +69,7 @@ export class WorkspaceTreeComponent implements OnInit {
     return this.workspaceService.workspacesTreeGet(this.workspace!.id, node.id, 'response')
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorSubject?.next(ErrorToEnum(error.status))
+          this.errorSubject?.next(errorToEnum(error.status))
           return EMPTY;
         }),
         map(res => res.body!.collection),
@@ -80,8 +80,7 @@ export class WorkspaceTreeComponent implements OnInit {
           //console.log(res, node, this.dataSource.data)
         }),
         map(res => {
-          let ret = res.filter(a => a.parentArticleId == node.id);
-          return ret;
+          return res.filter(a => a.parentArticleId == node.id);
         }));
   }
 
@@ -105,7 +104,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
     this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'response')
       .pipe(catchError((error: HttpErrorResponse) => {
-          this.errorSubject?.next(ErrorToEnum(error.status))
+          this.errorSubject?.next(errorToEnum(error.status))
           return EMPTY;
         }),
         map(res => res.body!),)
@@ -115,7 +114,7 @@ export class WorkspaceTreeComponent implements OnInit {
         if (selected == null && !this.isInitialized && this.workspace!.workspaceRootArticleSlug != this.articleSlug) {
           this.articleService.getArticleBySlugs(this.workspace!.slug, this.articleSlug, 'response')
             .pipe(catchError((error: HttpErrorResponse) => {
-                this.errorSubject?.next(ErrorToEnum(error.status))
+                this.errorSubject?.next(errorToEnum(error.status))
                 return EMPTY;
               }),
               map(res => res.body!),)
@@ -177,11 +176,11 @@ export class WorkspaceTreeComponent implements OnInit {
         },
         'response')
         .pipe(catchError((error: HttpErrorResponse) => {
-            this.errorSubject?.next(ErrorToEnum(error.status))
+            this.errorSubject?.next(errorToEnum(error.status))
             return EMPTY;
           }),
           map(res => res.body!),)
-        .subscribe(res => {
+        .subscribe(_ => {
           this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'body')
             .subscribe(result => {
               this.dataSource.data = result.collection;

@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {catchError, EMPTY, map, Observable, Subject, tap} from "rxjs";
+import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {catchError, EMPTY, map, Observable, Subject} from "rxjs";
 import {ArticleService} from "../../../api/article.service";
 import {Article} from "../../../shared/models/articles/article";
 import {ArticleContent} from "../../../shared/models/articles/article-content";
-import {Errors, ErrorToEnum} from "../../../core/enums/errors";
+import {Errors, errorToEnum} from "../../../core/enums/errors";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
@@ -32,7 +32,7 @@ export class WorkspaceViewerComponent implements AfterViewInit {
       }
       this.articleService.getArticleBySlugs(next[0], next[1], 'response')
         .pipe(catchError((error: HttpErrorResponse) => {
-            this.errorSubject?.next(ErrorToEnum(error.status))
+            this.errorSubject?.next(errorToEnum(error.status))
             return EMPTY;
           }),
           map(res => res.body!),)

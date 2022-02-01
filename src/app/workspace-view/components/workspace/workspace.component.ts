@@ -1,12 +1,12 @@
-import {Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Workspace} from "../../../shared/models/workspaces/workspace";
 import {Article} from "../../../shared/models/articles/article";
 import {ArticleService} from "../../../api/article.service";
 import {WorkspaceService} from "../../../api/workspace.service";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {Errors, ErrorToEnum} from "../../../core/enums/errors";
-import {BehaviorSubject, catchError, EMPTY, map, Observable, Subject, tap} from "rxjs";
+import {Errors, errorToEnum} from "../../../core/enums/errors";
+import {BehaviorSubject, catchError, EMPTY, Subject, tap} from "rxjs";
 
 @Component({
   selector: 'app-api',
@@ -66,7 +66,7 @@ export class WorkspaceComponent implements OnInit {
               this.isInitialized = true;
             }),
             catchError((error: HttpErrorResponse) => {
-              this.hasError = ErrorToEnum(error.status);
+              this.hasError = errorToEnum(error.status);
               return EMPTY;
             }))
           .subscribe();

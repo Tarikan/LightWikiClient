@@ -6,7 +6,7 @@ export enum Errors {
   ServerError = 500,
 }
 
-export function ErrorToEnum(error : number) : Errors
+export function errorToEnum(error : number) : Errors
 {
   switch (error) {
     case 400: {
