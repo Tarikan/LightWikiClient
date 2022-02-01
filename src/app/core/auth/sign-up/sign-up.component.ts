@@ -3,8 +3,6 @@ import {environment} from "../../../../environments/environment";
 import {NgForm} from "@angular/forms";
 import {CognitoUserPool} from 'amazon-cognito-identity-js';
 import {Router} from "@angular/router";
-import {errorToRoute} from "../../../app-routing.module";
-import {Errors} from "../../enums/errors";
 
 @Component({
   selector: 'app-sign-up',
@@ -42,7 +40,7 @@ export class SignUpComponent implements OnInit {
         this.isLoading = false;
         if (err) {
           alert(err.message || JSON.stringify(err));
-          this.router.navigate([errorToRoute(Errors.ServerError)])
+          // this.router.navigate([errorToRoute(Errors.ServerError)])
           return;
         }
         // this.router.navigate(['/signin']);
