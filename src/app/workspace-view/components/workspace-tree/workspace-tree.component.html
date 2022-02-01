@@ -3,33 +3,40 @@
     <span class="md-body-2" (click)="onRootNodeClick()">{{workspace!.name}}</span>
   </div>
 
+  <div class="space"></div>
   <mat-divider></mat-divider>
+  <div class="space"></div>
 
   <mat-tree *ngIf="workspace != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
     <cdk-nested-tree-node
-      (click)="onNodeClick(node)"
       *cdkTreeNodeDef="let node"
       class="tree-node">
-      <div appMaterialElevation class="article-card" [class.mat-background-primary]="node == selectedHeader">
+      <div appMaterialElevation class="article-card">
         <button disabled mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
           <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+
           </mat-icon>
         </button>
-        <span class="md-body-2" (click)="onNodeClick(node)">{{node.name}}</span>
+        <a (click)="onNodeClick(node)">{{node.name}}</a>
+        <button (click)="openDialog(node)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
     </cdk-nested-tree-node>
 
     <cdk-nested-tree-node
       *cdkTreeNodeDef="let node; when: hasChild"
       class="tree-node">
-      <div appMaterialElevation class="article-card" [class.mat-background-warn]="node == selectedHeader">
+      <div appMaterialElevation class="article-card">
         <button mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
           <mat-icon class="mat-icon-rtl-mirror">
             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
           </mat-icon>
         </button>
-        <span class="md-body-2" (click)="onNodeClick(node)">{{node.name}}</span>
+        <a (click)="onNodeClick(node)">{{node.name}}</a>
+        <button (click)="openDialog(node)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
       <div *ngIf="treeControl.isExpanded(node)">
         <ng-container cdkTreeNodeOutlet></ng-container>
@@ -37,4 +44,5 @@
     </cdk-nested-tree-node>
   </mat-tree>
 </div>
+
 

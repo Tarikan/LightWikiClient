@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse, HttpUrlEncodingCodec} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Article} from "../shared/models/articles/article";
@@ -9,19 +9,21 @@ import {UpdateArticleContent} from "./requests/articles/update-article-content";
 import {Success} from "../shared/models/success";
 import {CreateArticle} from "./requests/articles/create-article";
 import {UpdateArticle} from "./requests/articles/update-article";
+import {ArticleAncestors} from "../shared/models/articles/article-ancestors";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private defaultHeaders : HttpHeaders = new HttpHeaders();
+  private defaultHeaders: HttpHeaders = new HttpHeaders();
 
-  constructor(protected httpClient: HttpClient) { }
+  constructor(protected httpClient: HttpClient) {
+  }
 
   public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
   public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
   public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (workspaceSlug === null || workspaceSlug === undefined) {
       throw new Error('Required parameter workspaceSlug was null or undefined when calling getArticleBySlugs.');
@@ -33,13 +35,11 @@ export class ArticleService {
 
     let headers = this.defaultHeaders;
     // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-    ];
+    let httpHeaderAccepts: string[] = [];
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.request<any>('get',`${environment.baseUrl}/articles/display/${encodeURIComponent(String(workspaceSlug))}/${encodeURIComponent(String(articleNameSlug))}`,
+    return this.httpClient.request<any>('get', `${environment.baseUrl}/articles/display/${encodeURIComponent(String(workspaceSlug))}/${encodeURIComponent(String(articleNameSlug))}`,
       {
         headers: headers,
         observe: observe,
@@ -61,10 +61,7 @@ export class ArticleService {
   public articlesGet(filters?: string, sorts?: string, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<CollectionResult<Article>>;
   public articlesGet(filters?: string, sorts?: string, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CollectionResult<Article>>>;
   public articlesGet(filters?: string, sorts?: string, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CollectionResult<Article>>>;
-  public articlesGet(filters?: string, sorts?: string, page?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-
+  public articlesGet(filters?: string, sorts?: string, page?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
 
     let queryParameters = new HttpParams({encoder: new HttpUrlEncodingCodec()});
@@ -89,10 +86,9 @@ export class ArticleService {
       'text/json'
     ];
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.request<CollectionResult<Article>>('get',`${environment.baseUrl}/articles`,
+    return this.httpClient.request<CollectionResult<Article>>('get', `${environment.baseUrl}/articles`,
       {
         params: queryParameters,
         headers: headers,
@@ -112,7 +108,7 @@ export class ArticleService {
   public articlesIdContentGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ArticleContent>;
   public articlesIdContentGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ArticleContent>>;
   public articlesIdContentGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ArticleContent>>;
-  public articlesIdContentGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesIdContentGet(id: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling articlesIdContentGet.');
@@ -126,10 +122,9 @@ export class ArticleService {
       'text/json'
     ];
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.request<ArticleContent>('get',`${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
+    return this.httpClient.request<ArticleContent>('get', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
       {
         headers: headers,
         observe: observe,
@@ -149,7 +144,7 @@ export class ArticleService {
   public articlesIdContentPost(id: number, body?: UpdateArticleContent, observe?: 'body', reportProgress?: boolean): Observable<Success>;
   public articlesIdContentPost(id: number, body?: UpdateArticleContent, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
   public articlesIdContentPost(id: number, body?: UpdateArticleContent, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
-  public articlesIdContentPost(id: number, body?: UpdateArticleContent, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesIdContentPost(id: number, body?: UpdateArticleContent, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling articlesIdContentPost.');
@@ -171,7 +166,7 @@ export class ArticleService {
       'application/_*+json'
     ];
 
-    return this.httpClient.request<Success>('post',`${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
+    return this.httpClient.request<Success>('post', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
       {
         body: body,
         headers: headers,
@@ -191,7 +186,7 @@ export class ArticleService {
   public articlesIdDelete(id: number, observe?: 'body', reportProgress?: boolean): Observable<Success>;
   public articlesIdDelete(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
   public articlesIdDelete(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
-  public articlesIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling articlesIdDelete.');
@@ -205,10 +200,9 @@ export class ArticleService {
       'text/json'
     ];
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.request<Success>('delete',`${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
+    return this.httpClient.request<Success>('delete', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
       {
         headers: headers,
         observe: observe,
@@ -227,7 +221,7 @@ export class ArticleService {
   public articlesIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Article>;
   public articlesIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Article>>;
   public articlesIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Article>>;
-  public articlesIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesIdGet(id: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling articlesIdGet.');
@@ -241,10 +235,9 @@ export class ArticleService {
       'text/json'
     ];
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.request<Article>('get',`${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
+    return this.httpClient.request<Article>('get', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
       {
         headers: headers,
         observe: observe,
@@ -263,7 +256,7 @@ export class ArticleService {
   public articlesPost(body?: CreateArticle, observe?: 'body', reportProgress?: boolean): Observable<Success>;
   public articlesPost(body?: CreateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
   public articlesPost(body?: CreateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
-  public articlesPost(body?: CreateArticle, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesPost(body?: CreateArticle, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
 
     let headers = this.defaultHeaders;
@@ -281,7 +274,7 @@ export class ArticleService {
       'application/_*+json'
     ];
 
-    return this.httpClient.request<Success>('post',`${environment.baseUrl}/articles`,
+    return this.httpClient.request<Success>('post', `${environment.baseUrl}/articles`,
       {
         body: body,
         headers: headers,
@@ -301,7 +294,7 @@ export class ArticleService {
   public articlesPut(body?: UpdateArticle, observe?: 'body', reportProgress?: boolean): Observable<Success>;
   public articlesPut(body?: UpdateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
   public articlesPut(body?: UpdateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
-  public articlesPut(body?: UpdateArticle, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+  public articlesPut(body?: UpdateArticle, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
 
     let headers = this.defaultHeaders;
@@ -319,9 +312,39 @@ export class ArticleService {
       'application/_*+json'
     ];
 
-    return this.httpClient.request<Success>('put',`${environment.baseUrl}/articles`,
+    return this.httpClient.request<Success>('put', `${environment.baseUrl}/articles`,
       {
         body: body,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
+  }
+
+  public getArticleAncestors(id: number, observe?: 'body', reportProgress?: boolean): Observable<ArticleAncestors>;
+  public getArticleAncestors(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ArticleAncestors>>;
+  public getArticleAncestors(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ArticleAncestors>>;
+  public getArticleAncestors(id: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling articlesIdGet.');
+    }
+
+    let headers = this.defaultHeaders;
+    // to determine the Accept header
+    let httpHeaderAccepts: string[] = [
+      'text/plain',
+      'application/json',
+      'text/json'
+    ];
+    // to determine the Content-Type header
+    const consumes: string[] = [];
+
+    return this.httpClient.request<Article>(
+      'get',
+      `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/ancestors`,
+      {
         headers: headers,
         observe: observe,
         reportProgress: reportProgress

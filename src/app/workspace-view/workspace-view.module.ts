@@ -12,6 +12,13 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import { WorkspaceViewerComponent } from './components/workspace-viewer/workspace-viewer.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatDividerModule} from "@angular/material/divider";
+import { WorkspaceEditorComponent } from './components/workspace-editor/workspace-editor.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CreateArticleDialogComponent } from './components/create-article-dialog/create-article-dialog.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatDialogModule} from "@angular/material/dialog";
+import {FormsModule} from "@angular/forms";
 
 
 
@@ -19,7 +26,9 @@ import {MatDividerModule} from "@angular/material/divider";
   declarations: [
     WorkspaceComponent,
     WorkspaceTreeComponent,
-    WorkspaceViewerComponent
+    WorkspaceViewerComponent,
+    WorkspaceEditorComponent,
+    CreateArticleDialogComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +40,12 @@ import {MatDividerModule} from "@angular/material/divider";
     MatIconModule,
     MatSidenavModule,
     MatCardModule,
-    MatDividerModule
+    MatDividerModule,
+    CKEditorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    FormsModule
   ]
 })
 export class WorkspaceViewModule { }

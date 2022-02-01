@@ -1,0 +1,11 @@
+<div class="container" *ngIf="isInitialized">
+  <div>
+    <button style="display:inline-block;" mat-button [routerLink]="getArticleViewRoute()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 style="display:inline-block;">{{article?.name}}</h1>
+  </div>
+  <ckeditor #myEditor [editor]="editor" [data]="articleText"></ckeditor>
+  <mat-divider></mat-divider>
+  <button mat-stroked-button color="primary" (click)="onSubmit()">Submit</button>
+</div>

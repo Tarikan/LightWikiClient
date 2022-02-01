@@ -1,4 +1,9 @@
 <div class="container" *ngIf="article != undefined">
+  <div class="button-container">
+    <button mat-button><mat-icon>more_vert</mat-icon></button>
+    <button mat-button><mat-icon>settings</mat-icon></button>
+    <button mat-button [routerLink]="['./edit']"><mat-icon>edit</mat-icon></button>
+  </div>
   <h1>{{article.name}}</h1>
-  <div #articlePlaceholder></div>
+  <div class="ck-content" #articlePlaceholder></div>
 </div>

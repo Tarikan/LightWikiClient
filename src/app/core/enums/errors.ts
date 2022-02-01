@@ -25,7 +25,7 @@ export function ErrorToEnum(error : number) : Errors
       return Errors.ServerError;
     }
     default: {
-      throw Error("Wrong status code");
+      return Errors.ServerError;
     }
   }
 }

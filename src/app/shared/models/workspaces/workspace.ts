@@ -5,5 +5,6 @@ export interface Workspace {
   name : string;
   slug : string;
   workspaceAccessRule : WorkspaceAccessRule;
+  workspaceAccessRuleForCaller : WorkspaceAccessRule;
   workspaceRootArticleSlug : string;
 }

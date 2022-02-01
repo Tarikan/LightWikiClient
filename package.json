@@ -20,6 +20,8 @@
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
+    "@ckeditor/ckeditor5-angular": "^2.0.2",
+    "@ckeditor/ckeditor5-build-classic": "^31.1.0",
     "amazon-cognito-identity-js": "^5.2.4",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",

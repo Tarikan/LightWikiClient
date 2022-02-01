@@ -11,9 +11,24 @@
 
 .article-card {
   display: block;
-  padding: 0.4rem;
+  padding: 0.5rem;
+  overflow: auto;
 }
 
 .tree-node .tree-node {
-  padding-left: 40px;
+  padding-left: 20px;
+}
+
+.article-add-btn {
+  float: right;
+  clear: right;
+  display: none;
+}
+
+.article-card:hover .article-add-btn {
+  display: inline-block;
+}
+
+.space {
+  height: 0.6rem;
 }

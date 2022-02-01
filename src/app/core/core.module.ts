@@ -19,6 +19,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ErrorSwitcherComponent } from './components/error-switcher/error-switcher.component';
 import { MaterialElevationDirective } from './directives/material-elevation.directive';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { MaterialElevationDirective } from './directives/material-elevation.dire
     MatButtonToggleModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    RouterModule,
   ]
 })
 export class CoreModule { }

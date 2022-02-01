@@ -30,7 +30,7 @@ export class WorkspaceComponent implements OnInit {
     private route: ActivatedRoute,
     private articleService: ArticleService,
     private workspaceService: WorkspaceService) {
-    this.workspaceObservable = new BehaviorSubject<Workspace | undefined>(this.workspace!);
+    this.workspaceObservable = new BehaviorSubject<Workspace | undefined>(this.workspace);
   }
 
   ngOnInit(): void {
@@ -42,7 +42,9 @@ export class WorkspaceComponent implements OnInit {
 
       //console.log(this.workspaceSlug, this.articleSlug);
 
-      if (oldWorkspaceSlug != this.workspaceSlug)
+      if (oldWorkspaceSlug != this.workspaceSlug ||
+        this.articleSlug == '' ||
+        this.articleSlug == undefined)
         this.workspaceService.getWorkspaceBySlug(this.workspaceSlug, 'response')
           .pipe(
             tap((response: HttpResponse<Workspace>) => {
