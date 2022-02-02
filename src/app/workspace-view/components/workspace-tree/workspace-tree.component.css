@@ -1,12 +1,22 @@
-.tree ul,
-.tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-}
-.tree-node {
-  white-space:nowrap;
+.tree-header {
   display: block;
+  padding: 0.5rem;
+  overflow: auto;
+}
+
+.tree-header-add-btn {
+  float: right;
+  clear: right;
+  display: inline-block;
+}
+
+.tree-node {
+  white-space: nowrap;
+  display: block;
+}
+
+.tree-node-selected {
+  font-weight: bold;
 }
 
 .article-card {

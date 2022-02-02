@@ -1,9 +1,30 @@
 <div class="container" *ngIf="article != undefined">
-  <div class="button-container">
-    <button mat-button><mat-icon>more_vert</mat-icon></button>
-    <button mat-button><mat-icon>settings</mat-icon></button>
-    <button mat-button [routerLink]="['./edit']"><mat-icon>edit</mat-icon></button>
+  <div *ngIf="viewType !== ViewType.content" class="left-button-container">
+    <button mat-button (click)="setViewType(ViewType.content)">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="viewType === ViewType.content" class="button-container">
+    <button mat-button (click)="setViewType(ViewType.access)">
+      <mat-icon>lock</mat-icon>
+    </button>
+    <button mat-button (click)="setViewType(ViewType.history)">
+      <mat-icon>history</mat-icon>
+    </button>
+    <button mat-button (click)="openDialog()">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <button mat-button [routerLink]="['./edit']">
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
   <h1>{{article.name}}</h1>
-  <div class="ck-content" #articlePlaceholder></div>
+  <div *ngIf="viewType === ViewType.content" class="ck-content" #articlePlaceholder></div>
+  <div *ngIf="viewType === ViewType.history">
+    <app-versions-view [article]="articleBehaviorSubject.asObservable()"></app-versions-view>
+  </div>
+</div>
+
+<div *ngIf="article == undefined" class="full-screen-spinner-container-without-background-flex">
+  <mat-spinner class="full-screen-spinner-flex"></mat-spinner>
 </div>

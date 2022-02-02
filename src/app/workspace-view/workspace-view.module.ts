@@ -19,6 +19,11 @@ import {MatInputModule} from "@angular/material/input";
 import {MatDialogModule} from "@angular/material/dialog";
 import {FormsModule} from "@angular/forms";
 import {AngularSplitModule} from "angular-split";
+import { UpdateArticleDialogComponent } from './components/update-article-dialog/update-article-dialog.component';
+import { VersionsViewComponent } from './components/versions-view/versions-view.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -27,7 +32,9 @@ import {AngularSplitModule} from "angular-split";
     WorkspaceTreeComponent,
     WorkspaceViewerComponent,
     WorkspaceEditorComponent,
-    CreateArticleDialogComponent
+    CreateArticleDialogComponent,
+    UpdateArticleDialogComponent,
+    VersionsViewComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +51,10 @@ import {AngularSplitModule} from "angular-split";
     MatInputModule,
     MatDialogModule,
     FormsModule,
-    AngularSplitModule
+    AngularSplitModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    MatListModule
   ]
 })
 export class WorkspaceViewModule {

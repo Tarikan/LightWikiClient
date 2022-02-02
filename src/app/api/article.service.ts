@@ -10,6 +10,7 @@ import {Success} from "../shared/models/success";
 import {CreateArticle} from "./requests/articles/create-article";
 import {UpdateArticle} from "./requests/articles/update-article";
 import {ArticleAncestors} from "../shared/models/articles/article-ancestors";
+import {SuccessWithId} from "../shared/models/success-with-id";
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +35,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<any>('get', `${environment.baseUrl}/articles/display/${encodeURIComponent(String(workspaceSlug))}/${encodeURIComponent(String(articleNameSlug))}`,
       {
@@ -79,14 +76,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<CollectionResult<Article>>('get', `${environment.baseUrl}/articles`,
       {
@@ -98,13 +87,6 @@ export class ArticleService {
     );
   }
 
-  /**
-   *
-   *
-   * @param id
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
   public articlesIdContentGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ArticleContent>;
   public articlesIdContentGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ArticleContent>>;
   public articlesIdContentGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ArticleContent>>;
@@ -115,14 +97,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<ArticleContent>('get', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
       {
@@ -152,19 +126,6 @@ export class ArticleService {
 
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
 
     return this.httpClient.request<Success>('post', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}/content`,
       {
@@ -193,14 +154,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<Success>('delete', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
       {
@@ -228,14 +181,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<Article>('get', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
       {
@@ -253,26 +198,13 @@ export class ArticleService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public articlesPost(body?: CreateArticle, observe?: 'body', reportProgress?: boolean): Observable<Success>;
-  public articlesPost(body?: CreateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
-  public articlesPost(body?: CreateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
+  public articlesPost(body?: CreateArticle, observe?: 'body', reportProgress?: boolean): Observable<SuccessWithId<number>>;
+  public articlesPost(body?: CreateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SuccessWithId<number>>>;
+  public articlesPost(body?: CreateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SuccessWithId<number>>>;
   public articlesPost(body?: CreateArticle, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
 
     return this.httpClient.request<Success>('post', `${environment.baseUrl}/articles`,
       {
@@ -287,32 +219,22 @@ export class ArticleService {
   /**
    *
    *
+   * @param id
    * @param body
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public articlesPut(body?: UpdateArticle, observe?: 'body', reportProgress?: boolean): Observable<Success>;
-  public articlesPut(body?: UpdateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
-  public articlesPut(body?: UpdateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
-  public articlesPut(body?: UpdateArticle, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public articlesPut(id: number, body?: UpdateArticle, observe?: 'body', reportProgress?: boolean): Observable<Success>;
+  public articlesPut(id: number, body?: UpdateArticle, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Success>>;
+  public articlesPut(id: number, body?: UpdateArticle, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Success>>;
+  public articlesPut(id: number, body?: UpdateArticle, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling articlesIdGet.');
+    }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
 
-    return this.httpClient.request<Success>('put', `${environment.baseUrl}/articles`,
+    return this.httpClient.request<Success>('put', `${environment.baseUrl}/articles/${encodeURIComponent(String(id))}`,
       {
         body: body,
         headers: headers,
@@ -332,14 +254,6 @@ export class ArticleService {
     }
 
     let headers = this.defaultHeaders;
-    // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
-    // to determine the Content-Type header
-    const consumes: string[] = [];
 
     return this.httpClient.request<Article>(
       'get',

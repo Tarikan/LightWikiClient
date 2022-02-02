@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Workspace} from "../../../shared/models/workspaces/workspace";
 import {ArticleHeader} from "../../../shared/models/articles/article-header";
-import {catchError, EMPTY, map, Observable, Subject, tap} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, map, Observable, Subject, tap} from "rxjs";
 import {WorkspaceService} from "../../../api/workspace.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatTreeNestedDataSource} from "@angular/material/tree";
@@ -29,6 +29,7 @@ export class WorkspaceTreeComponent implements OnInit {
   public workspace: Workspace | undefined;
   public articleSlug: string = '';
   public canCreateArticle: boolean = false;
+  public selectedComponentId: BehaviorSubject<number | undefined> = new BehaviorSubject<number | undefined>(undefined);
 
   constructor(
     private workspaceService: WorkspaceService,
@@ -38,7 +39,6 @@ export class WorkspaceTreeComponent implements OnInit {
     public dialog: MatDialog) {
   }
 
-  @Input('selectedComponentId') selectedComponentId: number | undefined;
   @Input('workspaceObservable') workspaceObservable!: Observable<Workspace | undefined>;
   @Input('errorSubject') errorSubject: Subject<Errors> | undefined;
 
@@ -89,14 +89,17 @@ export class WorkspaceTreeComponent implements OnInit {
   }
 
   onNodeClick(node: ArticleHeader): void {
+    this.selectedComponentId.next(node.id);
     this.router.navigate([`view/${this.workspace!.slug}/${node.slug}`])
   }
 
   onRootNodeClick(): void {
+    this.selectedComponentId.next(undefined);
     this.router.navigate([`view/${this.workspace!.slug}/${this.workspace!.workspaceRootArticleSlug}`])
   }
 
   private onWorkspaceEventEmitted(workspace: Workspace): void {
+    this.dataSource.data = [];
     this.workspace = workspace;
 
     this.canCreateArticle =
@@ -111,7 +114,7 @@ export class WorkspaceTreeComponent implements OnInit {
       .subscribe(result => {
         this.dataSource.data = result.collection.filter(a => a.parentArticleId == null);
         let selected = this.dataSource.data.find(h => h.slug == this.articleSlug);
-        if (selected == null && !this.isInitialized && this.workspace!.workspaceRootArticleSlug != this.articleSlug) {
+        if ((selected === null || selected === undefined) && !this.isInitialized && this.workspace?.workspaceRootArticleSlug != this.articleSlug) {
           this.articleService.getArticleBySlugs(this.workspace!.slug, this.articleSlug, 'response')
             .pipe(catchError((error: HttpErrorResponse) => {
                 this.errorSubject?.next(errorToEnum(error.status))
@@ -119,7 +122,8 @@ export class WorkspaceTreeComponent implements OnInit {
               }),
               map(res => res.body!),)
             .subscribe(article => {
-              this.selectedComponentId = article.id;
+
+              this.selectedComponentId.next(article.id);
               this.articleService.getArticleAncestors(article.id, 'body')
                 .subscribe(ancestors => {
                   let col = this.dataSource.data;
@@ -128,7 +132,7 @@ export class WorkspaceTreeComponent implements OnInit {
                 })
             })
         } else {
-          this.selectedComponentId = selected!.id;
+          this.selectedComponentId.next(selected!.id);
         }
         this.isInitialized = true;
       });
@@ -136,8 +140,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
   recursiveExpandTree(root: ArticleHeader, nodes: number[], pos: number) {
     if (root.id == nodes.slice(-1)[0]) {
-      for (let i = 0; i < nodes.length; i++)
-      {
+      for (let i = 0; i < nodes.length; i++) {
         this.treeControl.expand(this.dataSource.data.find(n => n.id == nodes[i])!)
       }
     }
@@ -159,7 +162,7 @@ export class WorkspaceTreeComponent implements OnInit {
     }
   }
 
-  openDialog(articleHeader: ArticleHeader): void {
+  openDialog(id: number | undefined): void {
     const dialogRef = this.dialog.open(CreateArticleDialogComponent, {
       data: {name: '', animal: ''},
     });
@@ -171,7 +174,8 @@ export class WorkspaceTreeComponent implements OnInit {
       this.articleService.articlesPost(
         {
           globalAccessRule: result.accessRule,
-          name: result.name, parentId: articleHeader.id,
+          name: result.name,
+          parentId: id,
           workspaceId: this.workspace!.id
         },
         'response')
@@ -180,11 +184,20 @@ export class WorkspaceTreeComponent implements OnInit {
             return EMPTY;
           }),
           map(res => res.body!),)
-        .subscribe(_ => {
-          this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'body')
-            .subscribe(result => {
-              this.dataSource.data = result.collection;
-            });
+        .subscribe(res => {
+          this.treeControl.collapseAll();
+          this.isInitialized = false;
+
+          this.articleService.articlesIdGet(res.id, 'response')
+            .pipe(catchError((error: HttpErrorResponse) => {
+                this.errorSubject?.next(errorToEnum(error.status))
+                return EMPTY;
+              }),
+              map(res => res.body!),)
+            .subscribe(article => {
+              this.router.navigate([`view/${this.workspace!.slug}/${article.slug}`]);
+              this.onWorkspaceEventEmitted(this.workspace!);
+            })
         });
     });
   }

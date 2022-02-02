@@ -7,18 +7,25 @@
   <mat-divider></mat-divider>
   <div class="space"></div>
 
+  <div class="tree-header">
+    <span class="mat-h2">Article tree</span>
+    <button (click)="openDialog(undefined)" *ngIf="canCreateArticle" class="tree-header-add-btn" mat-button>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
   <mat-tree *ngIf="workspace != undefined" [dataSource]="dataSource" [treeControl]="treeControl">
     <cdk-nested-tree-node
       *cdkTreeNodeDef="let node"
       class="tree-node">
-      <div appMaterialElevation class="article-card">
+      <div [class.tree-node-selected]="node.id == (selectedComponentId | async)" appMaterialElevation class="article-card">
         <button disabled mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
           <mat-icon class="mat-icon-rtl-mirror">
 
           </mat-icon>
         </button>
         <a (click)="onNodeClick(node)">{{node.name}}</a>
-        <button (click)="openDialog(node)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
+        <button (click)="openDialog(node.id)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -27,14 +34,14 @@
     <cdk-nested-tree-node
       *cdkTreeNodeDef="let node; when: hasChild"
       class="tree-node">
-      <div appMaterialElevation class="article-card">
+      <div [class.tree-node-selected]="node.id == (selectedComponentId | async)" appMaterialElevation class="article-card">
         <button mat-icon-button [attr.aria-label]="'Toggle ' + node.name" cdkTreeNodeToggle>
           <mat-icon class="mat-icon-rtl-mirror">
             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
           </mat-icon>
         </button>
         <a (click)="onNodeClick(node)">{{node.name}}</a>
-        <button (click)="openDialog(node)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
+        <button (click)="openDialog(node.id)" *ngIf="canCreateArticle" class="article-add-btn" mat-button>
           <mat-icon>add</mat-icon>
         </button>
       </div>

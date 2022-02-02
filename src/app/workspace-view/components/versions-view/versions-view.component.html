@@ -1,0 +1,20 @@
+<mat-list>
+  <mat-list-item *ngFor="let v of versions">
+    <span>
+      {{v.creationDate | date : 'medium'}}   {{v.id}}
+    </span>
+  </mat-list-item>
+</mat-list>
+
+<div class="full-screen-spinner-container-without-background-flex" *ngIf="isLoading">
+  <mat-spinner class="full-screen-spinner-flex"></mat-spinner>
+</div>
+
+<mat-paginator [length]=versionsCount
+               [pageSize]=pageSize
+               [pageIndex]="0"
+               [pageSizeOptions]="[5, 10, 25]"
+               (page)="onPaginatorUpdate($event)"
+               [showFirstLastButtons]="true"
+               aria-label="Select page" style="vertical-align: bottom">
+</mat-paginator>

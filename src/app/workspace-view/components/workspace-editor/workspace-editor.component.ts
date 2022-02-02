@@ -40,8 +40,6 @@ export class WorkspaceEditorComponent implements OnInit {
       this.workspaceSlug = result['workspace_slug'];
       this.articleSlug = result['article_slug'];
 
-      //console.log(this.workspaceSlug, this.articleSlug);
-
       this.workspaceService.getWorkspaceBySlug(this.workspaceSlug, 'response')
         .pipe(
           tap((response: HttpResponse<Workspace>) => {
@@ -62,7 +60,6 @@ export class WorkspaceEditorComponent implements OnInit {
             return EMPTY;
           }))
         .subscribe();
-      // console.log(this.workspaceSlug, this.articleSlug)
     })
   }
 

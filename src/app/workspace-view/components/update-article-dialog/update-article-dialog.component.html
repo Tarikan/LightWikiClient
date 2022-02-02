@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Create new article</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Name of the article</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+</div>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Global access rule of the article</mat-label>
+    <input matInput [(ngModel)]="data.accessRule">
+  </mat-form-field>
+</div>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Slug of article</mat-label>
+    <input matInput [(ngModel)]="data.slug">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Update article</button>
+</div>
