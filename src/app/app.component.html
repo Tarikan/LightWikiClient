@@ -1,7 +1,11 @@
 <div class="main-container">
-  <app-header></app-header>
-
-  <div class="router-outlet">
-    <router-outlet ></router-outlet>
-  </div>
+  <app-header [onMenu]="drawer.toggle.bind(drawer)"></app-header>
+  <mat-drawer-container>
+    <mat-drawer #drawer mode="side" [opened]="showSidenav">
+      <div style="width: 100%; background-color: black;">SIDENAV</div>
+    </mat-drawer>
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
 </div>

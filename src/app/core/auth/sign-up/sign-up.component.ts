@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {environment} from "../../../../environments/environment";
 import {NgForm} from "@angular/forms";
-import {CognitoUserPool} from 'amazon-cognito-identity-js';
 import {Router} from "@angular/router";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-sign-up',
@@ -14,7 +13,7 @@ export class SignUpComponent implements OnInit {
   email:string = '';
   password:string = '';
 
-  constructor(private router : Router) { }
+  constructor(private router : Router, private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -23,28 +22,20 @@ export class SignUpComponent implements OnInit {
     this.router.navigate(['sign-in'])
   }
 
+  stopLoading(): void {
+    this.isLoading = false;
+  }
+
+  onError(err: any): void {
+    // console.error(err.message || JSON.stringify(err))
+    this.router.navigate(['error']);
+    this.isLoading = false;
+  }
+
   onSignup(form: NgForm) {
     if (form.valid) {
       this.isLoading = true;
-      var poolData = {
-        UserPoolId: environment.cognitoUserPoolId, // Your user pool id here
-        ClientId: environment.cognitoAppClientId // Your client id here
-      };
-      var userPool = new CognitoUserPool(poolData);
-      var attributeList: any[] = [];
-
-      userPool.signUp(this.email, this.password, attributeList, [], (
-        err,
-        _
-      ) => {
-        this.isLoading = false;
-        if (err) {
-          alert(err.message || JSON.stringify(err));
-          // this.router.navigate([errorToRoute(Errors.ServerError)])
-          return;
-        }
-        // this.router.navigate(['/signin']);
-      });
+      this.authService.SignUp(this.email, this.password, this.stopLoading.bind(this), this.onError.bind(this));
     }
   }
 }

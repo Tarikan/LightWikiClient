@@ -5,7 +5,7 @@
     </button>
     <h1 style="display:inline-block;">{{article?.name}}</h1>
   </div>
-  <ckeditor #myEditor [editor]="editor" [data]="articleText"></ckeditor>
+  <ckeditor #myEditor [editor]="editor" [(ngModel)]="editorData" (ready)="onEditorReady($event)"></ckeditor>
   <mat-divider></mat-divider>
   <button mat-stroked-button color="primary" (click)="onSubmit()">Submit</button>
 </div>

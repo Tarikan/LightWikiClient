@@ -4,7 +4,7 @@
       <app-workspace-tree [errorSubject]="error" *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
     </as-split-area>
     <as-split-area [size]="80">
-      <app-workspace-viewer [errorSubject]="error" [workspaceArticleSlugs]="slugsObservable" [workspaceSlug]="workspaceSlug" [articleSlug]="articleSlug"></app-workspace-viewer>
+      <app-workspace-viewer [errorSubject]="error"></app-workspace-viewer>
     </as-split-area>
   </as-split>
 </div>

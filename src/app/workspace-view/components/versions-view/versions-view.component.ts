@@ -8,6 +8,7 @@ import {ArticleVersionService} from "../../../api/article-version.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {errorToEnum} from "../../../core/enums/errors";
 import {errorToRoute} from "../../../app-routing.module";
+import {QueryParamNames} from "../../query-param-names";
 
 @Component({
   selector: 'app-versions-view',
@@ -20,6 +21,7 @@ export class VersionsViewComponent implements OnInit {
   public pageSize: number = 10;
   public isLoading: boolean = true;
   private article: Article | undefined;
+  private workspaceSlug: string | undefined;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -29,14 +31,25 @@ export class VersionsViewComponent implements OnInit {
   @Input('article') articleObservable: Observable<Article | undefined> | undefined;
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.workspaceSlug = params[QueryParamNames.workspaceSlug];
+    })
     this.articleObservable?.subscribe(next => {
-      if (next == undefined)
-      {
+      if (next == undefined) {
         return;
       }
       this.article = next;
       this.onPaginatorUpdate({length: 0, pageIndex: 0, pageSize: this.pageSize})
     });
+  }
+
+  navigateToVersionView(id: number) {
+    this.router.navigate([`view/${this.workspaceSlug!}/${this.article!.slug}`], {
+      queryParams: {
+        [QueryParamNames.viewType]: 'historyView',
+        [QueryParamNames.articleVersion]: id,
+      }
+    })
   }
 
   onPaginatorUpdate(event: PageEvent) {
@@ -54,5 +67,4 @@ export class VersionsViewComponent implements OnInit {
         this.isLoading = false;
       });
   }
-
 }

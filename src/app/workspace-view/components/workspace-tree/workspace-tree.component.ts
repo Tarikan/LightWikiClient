@@ -15,6 +15,7 @@ import {
 import {ArticleService} from "../../../api/article.service";
 import {Errors, errorToEnum} from "../../../core/enums/errors";
 import {HttpErrorResponse} from "@angular/common/http";
+import {QueryParamNames} from "../../query-param-names";
 
 @Component({
   selector: 'app-workspace-tree',
@@ -44,7 +45,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(next => {
-      this.articleSlug = next['article_slug'];
+      this.articleSlug = next[QueryParamNames.articleSlug];
     });
 
     this.workspaceObservable.subscribe(next => {
@@ -74,10 +75,7 @@ export class WorkspaceTreeComponent implements OnInit {
         }),
         map(res => res.body!.collection),
         tap(res => {
-          //this.dataSource.data.push(...res.filter(r => !this.dataSource.data.find(a => a.id == r.id)));
-          //console.log(this.dataSource.data.filter(a => a.parentArticleId == node.id))
           this.dataSource.data.push(...res)
-          //console.log(res, node, this.dataSource.data)
         }),
         map(res => {
           return res.filter(a => a.parentArticleId == node.id);
@@ -132,7 +130,7 @@ export class WorkspaceTreeComponent implements OnInit {
                 })
             })
         } else {
-          this.selectedComponentId.next(selected!.id);
+          this.selectedComponentId.next(selected?.id);
         }
         this.isInitialized = true;
       });

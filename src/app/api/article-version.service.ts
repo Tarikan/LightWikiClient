@@ -40,6 +40,7 @@ export class ArticleVersionService {
     }
 
     let queryParameters = new HttpParams({encoder: new HttpUrlEncodingCodec()});
+    queryParameters = queryParameters.set('ArticleId', articleId);
     if (filters !== undefined && filters !== null) {
       queryParameters = queryParameters.set('Filters', <any>filters);
     }

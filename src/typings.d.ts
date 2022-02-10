@@ -1,5 +1,5 @@
-declare module '@ckeditor/ckeditor5-build-classic' {
-  const ClassicEditorBuild: any;
+declare module 'src/assets/ckeditor.js' {
+  const CustomEditorBuild: any;
 
-  export = ClassicEditorBuild;
+  export = CustomEditorBuild;
 }

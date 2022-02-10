@@ -21,9 +21,9 @@ export class ArticleService {
   constructor(protected httpClient: HttpClient) {
   }
 
-  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'body', reportProgress?: boolean): Observable<Article>;
+  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Article>>;
+  public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Article>>;
   public getArticleBySlugs(workspaceSlug: string, articleNameSlug: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (workspaceSlug === null || workspaceSlug === undefined) {

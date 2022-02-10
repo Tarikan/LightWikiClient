@@ -24,6 +24,7 @@ import { VersionsViewComponent } from './components/versions-view/versions-view.
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatListModule} from "@angular/material/list";
+import {NgxJdenticonModule} from "ngx-jdenticon";
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import {MatListModule} from "@angular/material/list";
     AngularSplitModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatListModule
+    MatListModule,
+    NgxJdenticonModule,
   ]
 })
 export class WorkspaceViewModule {

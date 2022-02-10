@@ -7,6 +7,7 @@ import {CoreModule} from "./core/core.module";
 import {AppRoutingModule} from './app-routing.module';
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
     BrowserAnimationsModule,
     CoreModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSidenavModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

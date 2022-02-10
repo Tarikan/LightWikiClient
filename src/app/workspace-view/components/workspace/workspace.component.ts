@@ -7,6 +7,7 @@ import {WorkspaceService} from "../../../api/workspace.service";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Errors, errorToEnum} from "../../../core/enums/errors";
 import {BehaviorSubject, catchError, EMPTY, Subject, tap} from "rxjs";
+import {QueryParamNames} from "../../query-param-names";
 
 @Component({
   selector: 'app-api',
@@ -22,9 +23,6 @@ export class WorkspaceComponent implements OnInit {
   public workspace: Workspace | undefined;
   public article: Article | undefined;
   public workspaceObservable: BehaviorSubject<Workspace | undefined>;
-  public slugsObservable: BehaviorSubject<[workspaceSlug: string, articleSlug: string]> = new BehaviorSubject<[string, string]>(
-    [this.workspaceSlug, this.articleSlug]
-  );
 
   constructor(
     private router: Router,
@@ -40,10 +38,10 @@ export class WorkspaceComponent implements OnInit {
     });
 
     this.route.params.subscribe(result => {
+      this.hasError = undefined;
       let oldWorkspaceSlug = this.workspaceSlug;
-      this.workspaceSlug = result['workspace_slug'];
-      this.articleSlug = result['article_slug'];
-      this.slugsObservable.next([this.workspaceSlug, this.articleSlug]);
+      this.workspaceSlug = result[QueryParamNames.workspaceSlug];
+      this.articleSlug = result[QueryParamNames.articleSlug];
 
       //console.log(this.workspaceSlug, this.articleSlug);
 

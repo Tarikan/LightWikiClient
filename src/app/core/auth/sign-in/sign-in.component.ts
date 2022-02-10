@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthenticationDetails, CognitoUser, CognitoUserPool} from "amazon-cognito-identity-js";
-import {environment} from "../../../../environments/environment";
 import {Router} from "@angular/router";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-sign-in',
@@ -14,50 +13,35 @@ export class SignInComponent implements OnInit {
   email_address: string = "";
   password: string = "";
 
-  constructor(private router : Router) { }
+  constructor(private router: Router, private authService: AuthService) {
+  }
 
   ngOnInit(): void {
   }
 
-  onNeedAccount() : void
-  {
+  onNeedAccount(): void {
     this.router.navigate(['sign-up'])
   }
 
-  onSignIn(form: NgForm){
+  stopLoading(): void {
+    this.isLoading = false;
+  }
+
+  onError(err: any): void {
+    // console.error(err.message || JSON.stringify(err))
+    // this.router.navigate(['error']);
+    this.isLoading = false;
+  }
+
+  onSignIn(form: NgForm) {
     if (form.valid) {
       this.isLoading = true;
-      let authenticationDetails = new AuthenticationDetails({
-        Username: this.email_address,
-        Password: this.password,
-      });
-      let poolData = {
-        UserPoolId: environment.cognitoUserPoolId, // Your user pool id here
-        ClientId: environment.cognitoAppClientId // Your client id here
-      };
 
-      let userPool = new CognitoUserPool(poolData);
-      let userData = { Username: this.email_address, Pool: userPool };
-      var cognitoUser = new CognitoUser(userData);
-      cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: (result) => {
-          this.isLoading = false;
-          console.log(result);
-          // this.router.navigate(["dashboard"])
-        },
-        onFailure: (err) => {
-          alert(err.message || JSON.stringify(err));
-          this.isLoading = false;
-        },
-      });
-    }
-    else {
-      const controls = form.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          console.log(name)
-        }
-      }
+      this.authService.SignIn(
+        this.email_address,
+        this.password,
+        this.stopLoading.bind(this),
+        this.onError.bind(this));
     }
   }
 }

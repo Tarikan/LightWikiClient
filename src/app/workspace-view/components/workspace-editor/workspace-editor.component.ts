@@ -6,10 +6,13 @@ import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Workspace} from "../../../shared/models/workspaces/workspace";
 import {WorkspaceService} from "../../../api/workspace.service";
 import {Article} from "../../../shared/models/articles/article";
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as CustomEditor from 'src/assets/ckeditor.js';
 import {UpdateArticleContent} from "../../../api/requests/articles/update-article-content";
 import {errorToRoute} from "../../../app-routing.module";
 import {errorToEnum} from "../../../core/enums/errors";
+import {QueryParamNames} from "../../query-param-names";
+import {MyUploadAdapter} from "./file-upload-adapter";
+import {AuthService} from "../../../core/auth/auth.service";
 
 
 @Component({
@@ -19,26 +22,27 @@ import {errorToEnum} from "../../../core/enums/errors";
 })
 export class WorkspaceEditorComponent implements OnInit {
 
-  public editor = ClassicEditor;
+  public editor = CustomEditor;
   public workspaceSlug: string = '';
   public articleSlug: string = '';
   public workspace: Workspace | undefined;
   public article: Article | undefined;
   public isInitialized: boolean = false;
-  public articleText: string = '';
+  public editorData: string = '';
 
   @ViewChild("myEditor", {static: false}) myEditor: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private articleService: ArticleService,
-              private workspaceService: WorkspaceService) {
+              private workspaceService: WorkspaceService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(result => {
-      this.workspaceSlug = result['workspace_slug'];
-      this.articleSlug = result['article_slug'];
+      this.workspaceSlug = result[QueryParamNames.workspaceSlug];
+      this.articleSlug = result[QueryParamNames.articleSlug];
 
       this.workspaceService.getWorkspaceBySlug(this.workspaceSlug, 'response')
         .pipe(
@@ -50,7 +54,7 @@ export class WorkspaceEditorComponent implements OnInit {
                 this.article = result!;
                 this.articleService.articlesIdContentGet(this.article!.id, 'body')
                   .subscribe(result => {
-                    this.articleText = result.text;
+                    this.editorData = result.text;
                     this.isInitialized = true;
                   })
               })
@@ -68,7 +72,7 @@ export class WorkspaceEditorComponent implements OnInit {
   }
 
   onSubmit(): void {
-    let request: UpdateArticleContent = {text: this.myEditor.editorWatchdog._getData().main};
+    let request: UpdateArticleContent = {text: this.editorData};
     this.articleService.articlesIdContentPost(this.article!.id, request, 'response')
       .pipe(catchError(error => {
         this.router.navigate([errorToRoute(errorToEnum(error.status))]);
@@ -77,6 +81,15 @@ export class WorkspaceEditorComponent implements OnInit {
       .subscribe(_ => {
         this.router.navigate([`view/${this.workspaceSlug}/${this.articleSlug}`]);
       })
+  }
+
+  // @ts-ignore
+  onEditorReady(editor: CustomEditor): void {
+    editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
+      return new MyUploadAdapter( loader, this.article!.id, this.authService );
+    };
+
+    console.log(editor);
   }
 
 }

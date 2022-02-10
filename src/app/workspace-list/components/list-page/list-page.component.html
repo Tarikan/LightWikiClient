@@ -1,6 +1,7 @@
 <div class="container mat-background-accent">
   <mat-nav-list>
     <mat-list-item class="list-item" *ngFor="let w of Workspaces" (click)="onWorkspaceClick(w.slug)">
+      <svg height="90%" data-jdenticon-value="`workspace-${w.id}`"></svg>
       <h3 class="item">{{w.id}}</h3>
       <h3 class="item">{{w.name}}</h3>
       <h3 class="item">{{w.slug}}</h3>

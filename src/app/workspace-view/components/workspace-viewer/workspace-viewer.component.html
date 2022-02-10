@@ -1,14 +1,14 @@
 <div class="container" *ngIf="article != undefined">
   <div *ngIf="viewType !== ViewType.content" class="left-button-container">
-    <button mat-button (click)="setViewType(ViewType.content)">
+    <button mat-button (click)="navigateTo(ViewType.content)">
       <mat-icon>arrow_back</mat-icon>
     </button>
   </div>
   <div *ngIf="viewType === ViewType.content" class="button-container">
-    <button mat-button (click)="setViewType(ViewType.access)">
+    <button mat-button (click)="navigateTo(ViewType.access)">
       <mat-icon>lock</mat-icon>
     </button>
-    <button mat-button (click)="setViewType(ViewType.history)">
+    <button mat-button (click)="navigateTo(ViewType.history)">
       <mat-icon>history</mat-icon>
     </button>
     <button mat-button (click)="openDialog()">
@@ -19,7 +19,8 @@
     </button>
   </div>
   <h1>{{article.name}}</h1>
-  <div *ngIf="viewType === ViewType.content" class="ck-content" #articlePlaceholder></div>
+  <div *ngIf="viewType === ViewType.content || viewType === ViewType.historyView" class="ck-content"
+       #articlePlaceholder></div>
   <div *ngIf="viewType === ViewType.history">
     <app-versions-view [article]="articleBehaviorSubject.asObservable()"></app-versions-view>
   </div>

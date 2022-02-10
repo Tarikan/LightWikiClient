@@ -6,6 +6,7 @@ import {MatListModule} from "@angular/material/list";
 import {WorkspaceListRoutingModule} from './workspace-list-routing.module';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {NgxJdenticonModule} from "ngx-jdenticon";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     MatListModule,
     WorkspaceListRoutingModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgxJdenticonModule,
   ]
 })
 export class WorkspaceListModule {
