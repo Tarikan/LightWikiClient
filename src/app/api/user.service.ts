@@ -110,7 +110,7 @@ export class UserService {
     );
   }
 
-  private static canConsumeForm(consumes: string[]): boolean {
+  private canConsumeForm(consumes: string[]): boolean {
     const form = 'multipart/form-data';
     for (const consume of consumes) {
       if (form === consume) {
