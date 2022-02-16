@@ -9,3 +9,11 @@
   flex-basis: 90%;
   max-height: 90%;
 }
+
+.sign-button {
+  display: block;
+}
+
+mat-drawer {
+  width: 20%;
+}

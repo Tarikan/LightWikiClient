@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {UserService} from "./api/user.service";
 
 @Component({
   selector: 'app-root',
@@ -6,11 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public showSidenav = false;
-  title = 'LightWikiWebClient';
-
-  public toggleSidenav(): void {
-    console.log(this);
-    this.showSidenav = !this.showSidenav;
-  }
+  public title = 'LightWikiWebClient';
 }

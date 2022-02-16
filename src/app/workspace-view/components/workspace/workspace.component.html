@@ -1,10 +1,10 @@
 <div *ngIf="hasError == undefined" class="container">
   <as-split direction="horizontal">
     <as-split-area [size]="20">
-      <app-workspace-tree [errorSubject]="error" *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
+      <app-workspace-tree *ngIf="isInitialized" [workspaceObservable]="workspaceObservable"></app-workspace-tree>
     </as-split-area>
     <as-split-area [size]="80">
-      <app-workspace-viewer [errorSubject]="error"></app-workspace-viewer>
+      <app-workspace-viewer></app-workspace-viewer>
     </as-split-area>
   </as-split>
 </div>

@@ -9,6 +9,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {errorToEnum} from "../../../core/enums/errors";
 import {errorToRoute} from "../../../app-routing.module";
 import {QueryParamNames} from "../../query-param-names";
+import {getSrcSetFromImage} from "../../../shared/models/images/image";
 
 @Component({
   selector: 'app-versions-view',
@@ -66,5 +67,13 @@ export class VersionsViewComponent implements OnInit {
         this.versions = x.collection;
         this.isLoading = false;
       });
+  }
+
+  getSrcSet(version: ArticleVersion): string[] {
+    return getSrcSetFromImage(version.user.avatar);
+  }
+
+  getJdenticonValueForUser(id: number): string {
+    return `user-${id}`;
   }
 }

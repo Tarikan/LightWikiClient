@@ -8,19 +8,29 @@ import {AppRoutingModule} from './app-routing.module';
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatButtonModule} from "@angular/material/button";
+import { SidePanelComponent } from './components/side-panel/side-panel.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {NgxJdenticonModule} from "ngx-jdenticon";
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SidePanelComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    CoreModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatSidenavModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        CoreModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        NgxJdenticonModule,
+        MatDividerModule,
+    ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,

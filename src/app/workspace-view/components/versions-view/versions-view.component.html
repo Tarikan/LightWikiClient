@@ -1,11 +1,15 @@
-<mat-list>
-  <mat-list-item *ngFor="let v of versions">
-    <span (click)="navigateToVersionView(v.id)">
-      {{v.creationDate | date : 'medium'}}   {{v.id}}
+<mat-nav-list>
+  <mat-list-item *ngFor="let v of versions" (click)="navigateToVersionView(v.id)">
+    <span>By {{v.user.name}}</span>
+    <img class="user-avatar" *ngIf="v.user.avatar != undefined" [src]="v.user.avatar.fileUrl" [srcset]="getSrcSet(v)" alt="">
+    <svg class="user-avatar" *ngIf="v.user.avatar == undefined" [data-jdenticon-value]="getJdenticonValueForUser(v.user.id)"></svg>
+    <div class="spacer"></div>
+    <span>
+      {{v.creationDate | date : 'medium'}}
     </span>
     <mat-divider></mat-divider>
   </mat-list-item>
-</mat-list>
+</mat-nav-list>
 
 <div class="full-screen-spinner-container-without-background-flex" *ngIf="isLoading">
   <mat-spinner class="full-screen-spinner-flex"></mat-spinner>

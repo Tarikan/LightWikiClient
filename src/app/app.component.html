@@ -1,8 +1,8 @@
 <div class="main-container">
   <app-header [onMenu]="drawer.toggle.bind(drawer)"></app-header>
-  <mat-drawer-container>
-    <mat-drawer #drawer mode="side" [opened]="showSidenav">
-      <div style="width: 100%; background-color: black;">SIDENAV</div>
+  <mat-drawer-container autosize class="router-outlet">
+    <mat-drawer #drawer mode="side">
+      <app-side-panel></app-side-panel>
     </mat-drawer>
     <mat-drawer-content>
       <router-outlet></router-outlet>

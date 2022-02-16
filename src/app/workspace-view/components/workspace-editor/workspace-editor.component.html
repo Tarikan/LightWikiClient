@@ -4,6 +4,9 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1 style="display:inline-block;">{{article?.name}}</h1>
+    <mat-form-field appearance="fill">
+      <input matInput [value]="article?.name">
+    </mat-form-field>
   </div>
   <ckeditor #myEditor [editor]="editor" [(ngModel)]="editorData" (ready)="onEditorReady($event)"></ckeditor>
   <mat-divider></mat-divider>

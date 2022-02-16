@@ -19,6 +19,8 @@
     </button>
   </div>
   <h1>{{article.name}}</h1>
+  <h3 *ngIf="viewType === ViewType.content">Created by {{article!.user.name}}, {{article!.createdAt | date}}.
+    <span *ngIf="article!.lastArticleVersion != undefined">Updated by {{article!.lastArticleVersion.user.name}}, {{article!.lastArticleVersion.creationDate | date}}</span></h3>
   <div *ngIf="viewType === ViewType.content || viewType === ViewType.historyView" class="ck-content"
        #articlePlaceholder></div>
   <div *ngIf="viewType === ViewType.history">

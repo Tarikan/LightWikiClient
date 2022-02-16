@@ -31,8 +31,8 @@ export class UserService {
     this.authService.userId.subscribe(id => {
       this.isLoading = true;
       this.userId = id;
-      if (id == undefined)
-      {
+      if (id == undefined) {
+        this.isLoading = false;
         this.userSubject.next(undefined);
         return;
       }
@@ -49,6 +49,7 @@ export class UserService {
         }),
         map(res => res.body!))
       .subscribe(res => {
+        this.isLoading = false;
         this.userSubject.next(res);
       })
   }
@@ -63,7 +64,7 @@ export class UserService {
 
     let headers = this.defaultHeaders;
 
-    return this.httpClient.request<User>('get', `${environment.baseUrl}/users/${encodeURIComponent(String(id))}/content`,
+    return this.httpClient.request<User>('get', `${environment.baseUrl}/users/${encodeURIComponent(String(id))}`,
       {
         headers: headers,
         observe: observe,

@@ -8,6 +8,7 @@ import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Errors, errorToEnum} from "../../../core/enums/errors";
 import {BehaviorSubject, catchError, EMPTY, Subject, tap} from "rxjs";
 import {QueryParamNames} from "../../query-param-names";
+import {WorkspaceViewService} from "../../workspace-view.service";
 
 @Component({
   selector: 'app-api',
@@ -16,7 +17,6 @@ import {QueryParamNames} from "../../query-param-names";
 })
 export class WorkspaceComponent implements OnInit {
   public isInitialized = false;
-  public error: Subject<Errors> = new Subject<Errors>();
   public hasError: Errors | undefined;
   public workspaceSlug: string = '';
   public articleSlug: string = '';
@@ -28,16 +28,18 @@ export class WorkspaceComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private articleService: ArticleService,
-    private workspaceService: WorkspaceService) {
+    private workspaceService: WorkspaceService,
+    private workspaceViewService: WorkspaceViewService) {
     this.workspaceObservable = new BehaviorSubject<Workspace | undefined>(this.workspace);
   }
 
   ngOnInit(): void {
-    this.error.subscribe(err => {
+    this.workspaceViewService.errorSubject.subscribe(err => {
       this.hasError = err!;
     });
 
     this.route.params.subscribe(result => {
+      this.workspaceViewService.onSlugsChange(result[QueryParamNames.workspaceSlug], result[QueryParamNames.articleSlug]);
       this.hasError = undefined;
       let oldWorkspaceSlug = this.workspaceSlug;
       this.workspaceSlug = result[QueryParamNames.workspaceSlug];
@@ -68,7 +70,6 @@ export class WorkspaceComponent implements OnInit {
               return EMPTY;
             }))
           .subscribe();
-      // console.log(this.workspaceSlug, this.articleSlug)
     })
   }
 

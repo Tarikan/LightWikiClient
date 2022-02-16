@@ -13,9 +13,10 @@ import {
   CreateArticleDialogData
 } from "../create-article-dialog/create-article-dialog.component";
 import {ArticleService} from "../../../api/article.service";
-import {Errors, errorToEnum} from "../../../core/enums/errors";
+import {errorToEnum} from "../../../core/enums/errors";
 import {HttpErrorResponse} from "@angular/common/http";
 import {QueryParamNames} from "../../query-param-names";
+import {WorkspaceViewService} from "../../workspace-view.service";
 
 @Component({
   selector: 'app-workspace-tree',
@@ -37,11 +38,11 @@ export class WorkspaceTreeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private articleService: ArticleService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private workspaceViewService: WorkspaceViewService) {
   }
 
   @Input('workspaceObservable') workspaceObservable!: Observable<Workspace | undefined>;
-  @Input('errorSubject') errorSubject: Subject<Errors> | undefined;
 
   ngOnInit(): void {
     this.route.params.subscribe(next => {
@@ -70,7 +71,7 @@ export class WorkspaceTreeComponent implements OnInit {
     return this.workspaceService.workspacesTreeGet(this.workspace!.id, node.id, 'response')
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorSubject?.next(errorToEnum(error.status))
+          this.workspaceViewService.errorSubject.next(errorToEnum(error.status))
           return EMPTY;
         }),
         map(res => res.body!.collection),
@@ -105,7 +106,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
     this.workspaceService.workspacesTreeGet(this.workspace!.id, undefined, 'response')
       .pipe(catchError((error: HttpErrorResponse) => {
-          this.errorSubject?.next(errorToEnum(error.status))
+          this.workspaceViewService.errorSubject.next(errorToEnum(error.status))
           return EMPTY;
         }),
         map(res => res.body!),)
@@ -115,7 +116,7 @@ export class WorkspaceTreeComponent implements OnInit {
         if ((selected === null || selected === undefined) && !this.isInitialized && this.workspace?.workspaceRootArticleSlug != this.articleSlug) {
           this.articleService.getArticleBySlugs(this.workspace!.slug, this.articleSlug, 'response')
             .pipe(catchError((error: HttpErrorResponse) => {
-                this.errorSubject?.next(errorToEnum(error.status))
+                this.workspaceViewService.errorSubject.next(errorToEnum(error.status))
                 return EMPTY;
               }),
               map(res => res.body!),)
@@ -178,7 +179,7 @@ export class WorkspaceTreeComponent implements OnInit {
         },
         'response')
         .pipe(catchError((error: HttpErrorResponse) => {
-            this.errorSubject?.next(errorToEnum(error.status))
+            this.workspaceViewService.errorSubject.next(errorToEnum(error.status))
             return EMPTY;
           }),
           map(res => res.body!),)
@@ -188,7 +189,7 @@ export class WorkspaceTreeComponent implements OnInit {
 
           this.articleService.articlesIdGet(res.id, 'response')
             .pipe(catchError((error: HttpErrorResponse) => {
-                this.errorSubject?.next(errorToEnum(error.status))
+                this.workspaceViewService.errorSubject.next(errorToEnum(error.status))
                 return EMPTY;
               }),
               map(res => res.body!),)

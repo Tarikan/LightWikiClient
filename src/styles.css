@@ -40,3 +40,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   align-self: center;
   justify-self: center;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}

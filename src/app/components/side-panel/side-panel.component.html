@@ -1,0 +1,26 @@
+<div *ngIf="isUserAuthorized !== undefined">
+  <div class="button-container" *ngIf="isUserAuthorized === false">
+    <button class="sign-button" color="primary" [routerLink]="['sign-in']" mat-raised-button>Sign in</button>
+    <button class="sign-button" color="primary" [routerLink]="['sign-up']" mat-raised-button>Sign up</button>
+  </div>
+  <div class="container" *ngIf="isUserAuthorized === true">
+    <div *ngIf="user!.avatar != undefined">
+      <img width="70%" class="avatar-image"
+           [src]="user!.avatar!.fileUrl!"
+           [srcset]="userAvatarSrcSet"
+           alt="Your avatar">
+    </div>
+    <div *ngIf="user!.avatar == undefined">
+      <svg class="avatar-svg" width="70%" [data-jdenticon-value]="jdenticonValue"></svg>
+    </div>
+
+    <h1 style="display: block">{{user!.name}}</h1>
+
+    <button class="sign-button" mat-raised-button [routerLink]="['account/settings']">Account settings</button>
+    <button class="sign-button" mat-raised-button (click)="onLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="spinner-container" *ngIf="isUserAuthorized === undefined">
+  <mat-spinner></mat-spinner>
+</div>

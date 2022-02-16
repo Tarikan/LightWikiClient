@@ -89,7 +89,6 @@ export class WorkspaceEditorComponent implements OnInit {
       return new MyUploadAdapter( loader, this.article!.id, this.authService );
     };
 
-    console.log(editor);
   }
 
 }

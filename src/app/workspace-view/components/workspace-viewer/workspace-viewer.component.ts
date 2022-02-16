@@ -14,6 +14,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ArticleVersionService} from "../../../api/article-version.service";
 import {errorToRoute} from "../../../app-routing.module";
 import {QueryParamNames} from "../../query-param-names";
+import {WorkspaceViewService} from "../../workspace-view.service";
 
 enum ViewType {
   content = 'content',
@@ -48,6 +49,7 @@ export class WorkspaceViewerComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private workspaceViewService: WorkspaceViewService,
     private articleService: ArticleService,
     private articleVersionService: ArticleVersionService,
     public dialog: MatDialog,
@@ -56,7 +58,6 @@ export class WorkspaceViewerComponent implements OnInit, AfterViewInit {
   }
 
   @ViewChild('articlePlaceholder') articlePlaceholder!: ElementRef;
-  @Input('errorSubject') errorSubject: Subject<Errors> | undefined;
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -75,6 +76,11 @@ export class WorkspaceViewerComponent implements OnInit, AfterViewInit {
       this.route.params).subscribe(_ => {
       this.articleSlug = this.route.snapshot.params[QueryParamNames.articleSlug]!;
       this.workspaceSlug = this.route.snapshot.params[QueryParamNames.workspaceSlug]!;
+
+      if (this.workspaceSlug == undefined || this.articleSlug == undefined) {
+        return;
+      }
+
       this.viewType = this.route.snapshot.queryParams[QueryParamNames.viewType];
       if (this.viewType == undefined) {
         this.viewType = ViewType.content;
@@ -86,34 +92,28 @@ export class WorkspaceViewerComponent implements OnInit, AfterViewInit {
         }
       }
 
-      this.articleService.getArticleBySlugs(this.workspaceSlug!, this.articleSlug!, 'response')
-        .pipe(catchError((error: HttpErrorResponse) => {
-            this.errorSubject?.next(errorToEnum(error.status))
-            return EMPTY;
-          }),
-          map(res => res.body!),)
-        .subscribe((result: Article) => {
-          this.article = result;
-          this.articleBehaviorSubject.next(this.article);
-          if (this.viewType == ViewType.content) {
-            this.articleService.articlesIdContentGet(this.article!.id, 'body')
-              .subscribe(result => {
-                this.articleContent = result;
-                this.articlePlaceholder.nativeElement.innerHTML = result.text;
-              })
-          } else if (this.viewType == ViewType.historyView) {
-            this.articleVersionService.articleVersionsIdContentGet(this.articleVersion!, 'response')
-              .pipe(catchError((error: HttpErrorResponse) => {
-                  this.router.navigate([errorToRoute(errorToEnum(error.status))]);
-                  return EMPTY;
-                }),
-                map(res => res.body!))
-              .subscribe(result => {
-                this.articleContent = result;
-                this.articlePlaceholder.nativeElement.innerHTML = result.text;
-              })
-          }
-        });
+      this.workspaceViewService.article.subscribe(article => {
+        this.article = article;
+        this.articleBehaviorSubject.next(this.article);
+        if (this.viewType == ViewType.content) {
+          this.articleService.articlesIdContentGet(this.article!.id, 'body')
+            .subscribe(result => {
+              this.articleContent = result;
+              this.articlePlaceholder.nativeElement.innerHTML = result.text;
+            })
+        } else if (this.viewType == ViewType.historyView) {
+          this.articleVersionService.articleVersionsIdContentGet(this.articleVersion!, 'response')
+            .pipe(catchError((error: HttpErrorResponse) => {
+                this.router.navigate([errorToRoute(errorToEnum(error.status))]);
+                return EMPTY;
+              }),
+              map(res => res.body!))
+            .subscribe(result => {
+              this.articleContent = result;
+              this.articlePlaceholder.nativeElement.innerHTML = result.text;
+            })
+        }
+      });
     });
   }
 
@@ -134,7 +134,7 @@ export class WorkspaceViewerComponent implements OnInit, AfterViewInit {
         },
         'response')
         .pipe(catchError((error: HttpErrorResponse) => {
-            this.errorSubject?.next(errorToEnum(error.status))
+            this.workspaceViewService.errorSubject?.next(errorToEnum(error.status))
             return EMPTY;
           }),
           map(res => res.body!),)

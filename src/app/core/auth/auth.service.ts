@@ -15,7 +15,12 @@ export class AuthService {
   constructor(private router: Router) {
   }
 
-  private getCurrentUserId() : number {
+  private getCurrentUserId() : number | undefined {
+    if (!this.isLoggedIn())
+    {
+      return undefined;
+    }
+
     const idToken = this.getDeserializedIdToken();
 
     return idToken['custom:public_id'];

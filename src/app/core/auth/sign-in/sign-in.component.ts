@@ -27,6 +27,11 @@ export class SignInComponent implements OnInit {
     this.isLoading = false;
   }
 
+  onSuccess(): void {
+    this.stopLoading();
+    this.router.navigate(['workspaces']);
+  }
+
   onError(err: any): void {
     // console.error(err.message || JSON.stringify(err))
     // this.router.navigate(['error']);
@@ -40,7 +45,7 @@ export class SignInComponent implements OnInit {
       this.authService.SignIn(
         this.email_address,
         this.password,
-        this.stopLoading.bind(this),
+        this.onSuccess.bind(this),
         this.onError.bind(this));
     }
   }

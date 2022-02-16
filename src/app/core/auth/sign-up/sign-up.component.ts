@@ -26,6 +26,11 @@ export class SignUpComponent implements OnInit {
     this.isLoading = false;
   }
 
+  onSuccess(): void {
+    this.stopLoading();
+    this.router.navigate(['sign-in']);
+  }
+
   onError(err: any): void {
     // console.error(err.message || JSON.stringify(err))
     this.router.navigate(['error']);
@@ -35,7 +40,7 @@ export class SignUpComponent implements OnInit {
   onSignup(form: NgForm) {
     if (form.valid) {
       this.isLoading = true;
-      this.authService.SignUp(this.email, this.password, this.stopLoading.bind(this), this.onError.bind(this));
+      this.authService.SignUp(this.email, this.password, this.onSuccess.bind(this), this.onError.bind(this));
     }
   }
 }

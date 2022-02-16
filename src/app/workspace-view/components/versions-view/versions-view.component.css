@@ -1,0 +1,6 @@
+.user-avatar {
+  border-radius: 50%;
+  width: 3%;
+  border: 1px solid grey;
+  margin-left: 1rem;
+}
